@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { redirect } from "react-router-dom";
 
-//fetch login user
 
 export const loginUser = createAsyncThunk(
   'login/loginUser',
@@ -17,6 +17,11 @@ export const loginUser = createAsyncThunk(
         throw new Error('Login Fail');
       }
       const data = await response.json();
+      console.log("data", data)
+      if(response.status === 200 && data.token){
+        redirect("/");
+        console.log("response",response)
+      }
       return data;
     } catch (error) {
       console.log('error try ctach', error);
@@ -33,9 +38,7 @@ const loginSlice = createSlice({
     status: 'idle',
     error: null,
   },
-  // reducets sync
   reducers: {},
-  // redusces async
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
